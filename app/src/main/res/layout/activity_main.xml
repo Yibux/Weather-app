@@ -1,32 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:padding="16dp"
-    tools:context=".MainActivity2"
-    android:orientation="vertical">
+    tools:context=".MainActivity2">
 
-
-    <TextView
-        android:id="@+id/titleTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Weather Information"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
 
     <EditText
         android:id="@+id/cityEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/titleTextView"
         android:layout_marginBottom="40dp"
         android:hint="Enter City Name"
         android:inputType="text"
@@ -35,6 +22,30 @@
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="16dp" />
 
+
+    <Button
+        android:id="@+id/getCityButton"
+        android:layout_width="62dp"
+        android:layout_height="50dp"
+        android:text="Get new city"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteY="-9dp" />
+
+    <Button
+        android:id="@+id/addFavButton"
+        android:layout_width="62dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/cityEditText"
+        android:text="Fav add"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.76"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteY="-6dp" />
+
     <Button
         android:id="@+id/getWeatherButton"
         android:layout_width="wrap_content"
@@ -42,48 +53,45 @@
         android:layout_below="@id/cityEditText"
         android:text="Get Weather"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.482"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteY="442dp" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-
+        tools:layout_editor_absoluteY="215dp" />
 
     <TextView
         android:id="@+id/humidityTextView"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="208dp"
-        android:layout_marginEnd="32dp"
         android:layout_weight="1"
         android:text="Humidity: --"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="275dp"
+        tools:layout_editor_absoluteY="325dp" />
 
     <TextView
         android:id="@+id/pressureTextView"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="216dp"
         android:layout_weight="1"
         android:text="Pressure: --"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="142dp"
+        tools:layout_editor_absoluteY="309dp" />
 
     <TextView
         android:id="@+id/temperatureTextView"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="216dp"
         android:layout_weight="1"
         android:text="Temperature: --"
-        android:textSize="18sp" />
-
-    </LinearLayout>
+        android:textSize="18sp"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="6dp"
+        tools:layout_editor_absoluteY="304dp" />
 
 
     <!--    <include layout="@layout/content_weather" />-->
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

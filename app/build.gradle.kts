@@ -51,6 +51,7 @@ android {
 
 dependencies {
 
+    implementation("com.squareup.retrofit2:converter-gson:2.5.0")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
