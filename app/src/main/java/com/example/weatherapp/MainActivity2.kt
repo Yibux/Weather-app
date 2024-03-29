@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -21,26 +22,37 @@ import kotlin.math.roundToInt
 
 class MainActivity2 : AppCompatActivity() {
 
-    private lateinit var cityEditText: EditText
-    private lateinit var getWeatherButton: Button
+    private lateinit var cityTextView: TextView
+
     private lateinit var temperatureTextView: TextView
+    private lateinit var temperatureMinTextView: TextView
+    private lateinit var temperatureMaxTextView: TextView
+
     private lateinit var humidityTextView: TextView
     private lateinit var pressureTextView: TextView
+    private lateinit var windTextView: TextView
+    private lateinit var weatherPic: ImageView
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
-        cityEditText = findViewById(R.id.cityEditText)
-        getWeatherButton = findViewById(R.id.getWeatherButton)
-        temperatureTextView = findViewById(R.id.temperatureTextView)
-        humidityTextView = findViewById(R.id.humidityTextView)
-        pressureTextView = findViewById(R.id.pressureTextView)
+        cityTextView = findViewById(R.id.city)
 
-        getWeatherButton.setOnClickListener {
-            val city = cityEditText.text.toString()
-            fetchWeatherData(city)
-        }
+        temperatureTextView = findViewById(R.id.temperature)
+        temperatureMinTextView = findViewById(R.id.temperatureMin)
+        temperatureMaxTextView = findViewById(R.id.temperatureMax)
+
+        humidityTextView = findViewById(R.id.humidity)
+        pressureTextView = findViewById(R.id.pressureTextView)
+        windTextView = findViewById(R.id.wind)
+        weatherPic = findViewById(R.id.weatherPic)
+
+        fetchWeatherData("Warsaw")
+        cityTextView.setText("Warsaw")
     }
 
     private fun fetchWeatherData(city: String) {
@@ -50,12 +62,12 @@ class MainActivity2 : AppCompatActivity() {
                 val gson = Gson()
                 var weatherObject: CurrentWeatherApiClass? = null
 
-                if (file.exists()) {
+//                if (file.exists()) {
                     val bufferedReader = file.bufferedReader()
                     val inputString = bufferedReader.use { it.readText() }
 
                     weatherObject = gson.fromJson(inputString, CurrentWeatherApiClass::class.java)
-                } else {
+//                } else {
                     val url =
                         URL("https://api.openweathermap.org/data/2.5/weather?q=$city&appid=fe02a6b6389e2ba9aff21103d2dbe6fd")
                     val connection = url.openConnection() as HttpURLConnection
@@ -73,10 +85,8 @@ class MainActivity2 : AppCompatActivity() {
                         }
                         val response = buffer.toString()
 
-                        // Convert the response to a CurrentWeatherApiClass object
                         weatherObject = gson.fromJson(response, CurrentWeatherApiClass::class.java)
 
-                        // Save the data to a file
                         val weatherJson = gson.toJson(weatherObject)
                         val fos = openFileOutput("$city.json", Context.MODE_PRIVATE)
                         fos.write(weatherJson.toByteArray())
@@ -84,19 +94,36 @@ class MainActivity2 : AppCompatActivity() {
                     } else {
                         throw Exception("Failed to connect")
                     }
-                }
+//                }
 
                 // Update the UI
                 val main = weatherObject?.main
-                val tempK = main?.temp
-                val tempC = tempK?.minus(273)
+                val tempC = main?.temp?.minus(273)?.roundToInt()
+                val tempMin = main?.tempMin?.minus(273)?.roundToInt()
+                val tempMax = main?.tempMax?.minus(273)?.roundToInt()
                 val humidity = main?.humidity
                 val pressure = main?.pressure
+                val wind = weatherObject.wind?.speed
 
                 launch(Dispatchers.Main) {
-                    temperatureTextView.text = "Temperature: ${tempC?.roundToInt()}°C"
-                    humidityTextView.text = "Humidity: $humidity%"
-                    pressureTextView.text = "Pressure: $pressure hPa"
+                    temperatureTextView.text = "${tempC}°C"
+                    temperatureMinTextView.text = "${tempMin}°C"
+                    temperatureMaxTextView.text = "${tempMax}°C"
+                    humidityTextView.text = "$humidity%"
+                    pressureTextView.text = "$pressure hPa"
+                    windTextView.text = "$wind km/h"
+
+                    when(weatherObject.weather?.get(0)?.main) {
+                        "01d", "01n" -> weatherPic.setImageResource(R.drawable.sunny)
+                        "02d" -> weatherPic.setImageResource(R.drawable.cloudy_sunny)
+                        "02n" -> weatherPic.setImageResource(R.drawable.cloudy_sunny)
+                        "03d", "03n", "04d", "04n" -> weatherPic.setImageResource(R.drawable.cloudy)
+                        "09d", "09n", "10d", "10n" -> weatherPic.setImageResource(R.drawable.rainy)
+                        "11d", "11n" -> weatherPic.setImageResource(R.drawable.storm)
+                        "13d", "13n" -> weatherPic.setImageResource(R.drawable.snowy)
+                        "50d", "50n" -> weatherPic.setImageResource(R.drawable.windy)
+                        else -> weatherPic.setImageResource(R.drawable.sunny)
+                    }
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
