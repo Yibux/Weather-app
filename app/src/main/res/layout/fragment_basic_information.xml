@@ -8,74 +8,90 @@
     android:orientation="horizontal"
     tools:context=".BasicInformation">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="32dp"
-        android:src="@mipmap/plus"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:layout_constraintBottom_toTopOf="@+id/guideline4"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/addToFavIcon"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:src="@android:drawable/btn_star_big_off"
+            android:contentDescription="TODO" />
+
+        <ImageView
+            android:id="@+id/addCityIcon"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:src="@mipmap/plus"
+            android:contentDescription="TODO" />
+    </LinearLayout>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.1" />
+        app:layout_constraintGuide_percent="0.08" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.15" />
+        app:layout_constraintGuide_percent="0.2" />
 
     <TextView
         android:id="@+id/city"
         style="@style/BasicInfoText"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:autoSizeTextType="uniform"
         android:text="city"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/guideline1"
+        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="66dp"
+        app:layout_constraintTop_toTopOf="@+id/guideline4"
+        app:layout_constraintVertical_bias="0.342"
+        app:layout_constraintVertical_weight="1"
         tools:ignore="MissingConstraints" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="horizontal"
         android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/guideline7"
+        app:layout_constraintTop_toBottomOf="@+id/guideline7"
         app:layout_constraintTop_toTopOf="@+id/guideline1">
 
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.33333"
+            android:layout_height="match_parent"
+            android:layout_weight="0.4"
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/imageView3"
+                android:id="@+id/weatherPic"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/wind" />
-
-            <TextView
-                android:id="@+id/wind"
-                style="@style/BasicInfoText"
-                android:layout_width="match_parent"
-                android:text="-Km/h "
-                android:textAlignment="center" />
-
+                android:layout_height="match_parent"
+                android:src="@mipmap/cloudy_sunny" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.33333"
+            android:layout_height="match_parent"
+            android:layout_weight="0.4"
             android:orientation="vertical">
 
             <TextView
@@ -83,43 +99,52 @@
                 style="@style/BasicInfoText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_weight="0.2"
                 android:text="8"
-                android:textAlignment="center"
-                android:textSize="50dp" />
+                android:textAlignment="center" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight="0.8"
                 android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/tempMin"
-                    style="@style/BasicInfoText"
-                    android:text="5"
-                    android:textAlignment="center"
-                    tools:ignore="MissingConstraints" />
 
                 <ImageView
                     android:id="@+id/imageView4"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:src="@mipmap/arrow_down" />
+                    android:layout_gravity="center"
+                    android:src="@mipmap/arrow_down"
+                    android:layout_marginLeft="10sp"/>
 
                 <TextView
-                    android:id="@+id/tempMax"
+                    android:id="@+id/temperatureMin"
                     style="@style/BasicInfoText"
-                    android:text="10"
-                    android:textAlignment="center"
-                    tools:ignore="MissingConstraints" />
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.3"
+                    android:gravity="bottom|right"
+                    android:text="15"
+                    android:layout_marginRight="10sp"
+                    tools:ignore="MissingConstraints,RtlHardcoded" />
+
+                <TextView
+                    android:id="@+id/temperatureMax"
+                    style="@style/BasicInfoText"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.3"
+                    android:gravity="bottom|right"
+                    android:text="15"
+                    tools:ignore="MissingConstraints,RtlHardcoded" />
 
                 <ImageView
                     android:id="@+id/imageView5"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:layout_gravity="bottom"
                     android:layout_weight="1"
-                    android:src="@mipmap/arrow_up" />
+                    android:src="@mipmap/arrow_up"
+                    android:layout_marginRight="10sp"/>
             </LinearLayout>
 
             <LinearLayout
@@ -134,27 +159,53 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.33333"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
             android:orientation="vertical"
             android:textAlignment="center">
 
             <ImageView
                 android:id="@+id/imageView2"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="0.35"
                 android:src="@mipmap/humidity" />
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/humidity"
                 style="@style/BasicInfoText"
                 android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.15"
                 android:text="-%"
+                android:textAlignment="center" />
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.35"
+                android:src="@mipmap/wind" />
+
+            <TextView
+                android:id="@+id/wind"
+                style="@style/BasicInfoText"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.15"
+                android:text="-Km/h"
                 android:textAlignment="center" />
 
         </LinearLayout>
 
     </LinearLayout>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
