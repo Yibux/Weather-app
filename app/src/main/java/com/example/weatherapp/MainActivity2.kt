@@ -104,11 +104,13 @@ class MainActivity2 : AppCompatActivity() {
                     weatherObject?.let {
                         val list = it.list?.toMutableList()
                         if (list != null) {
-                            forecastAdapter.differ.submitList(list)
-                            val context = this@MainActivity2
-                            forecastView.apply() {
-                                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                                adapter = forecastAdapter
+                            runOnUiThread {
+                                forecastAdapter.differ.submitList(list)
+                                val context = this@MainActivity2
+                                forecastView.apply {
+                                    layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                                    adapter = forecastAdapter
+                                }
                             }
                         }
                     }
