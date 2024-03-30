@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="150dp"
+    android:layout_height="match_parent"
+    android:layout_margin="10sp"
     android:background="@color/background"
     android:orientation="vertical"
     app:layout_constraintBottom_toTopOf="@+id/guideline"
@@ -10,35 +11,21 @@
 
     <TextView
         android:id="@+id/dayForecast"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textColor="@color/white"
-        android:autoSizeTextType="uniform"
-        android:textSize="30dp"/>
+        style="@style/singleViewHolder" />
 
     <TextView
         android:id="@+id/hourForecast"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textColor="@color/white"
-        android:autoSizeTextType="uniform"
-        android:textSize="30dp"/>
+        style="@style/singleViewHolder"/>
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.25"
         android:src="@drawable/sunny" />
 
     <TextView
         android:id="@+id/temperatureForecast"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textColor="@color/white"
-        android:autoSizeTextType="uniform"
-        android:textSize="30dp"/>
+        style="@style/singleViewHolder"/>
 
 </LinearLayout>

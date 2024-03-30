@@ -10,6 +10,7 @@ import com.example.weatherapp.R
 import com.example.weatherapp.databinding.SingleDayWeatherBinding
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import kotlin.math.roundToInt
 
 class ForecastAdapter : RecyclerView.Adapter<ForecastAdapter.ViewHolder>(){
 
@@ -44,7 +45,7 @@ class ForecastAdapter : RecyclerView.Adapter<ForecastAdapter.ViewHolder>(){
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
         val time = if(hour > 12) "${hour - 12} PM" else "$hour AM"
         binding.hourForecast.text = time
-        binding.temperatureForecast.text = differ.currentList[position].main?.temp.toString() + "°C"
+        binding.temperatureForecast.text = differ.currentList[position].main?.temp?.roundToInt()?.minus(273).toString() + "°C"
 
         when(differ.currentList[position].weather?.get(0)?.icon) {
             "01d", "01n" -> binding.imageView.setImageResource(R.drawable.sunny)
