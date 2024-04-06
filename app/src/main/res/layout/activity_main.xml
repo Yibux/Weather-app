@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context=".MainActivity2"
+    tools:context=".Activity.MainActivity2"
     android:background="#21252B">
 
 
@@ -26,6 +26,15 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.65" />
+
+<!--    <include-->
+<!--        android:id="@+id/forecastList"-->
+<!--        layout="@layout/fragment_forecast"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        tools:layout_editor_absoluteX="16dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/include" />-->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/forecastList"

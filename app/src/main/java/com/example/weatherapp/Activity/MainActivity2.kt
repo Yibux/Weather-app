@@ -1,4 +1,4 @@
-package com.example.weatherapp
+package com.example.weatherapp.Activity
 
 import android.content.Context
 import android.os.Bundle
@@ -9,8 +9,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.Adapter.ForecastAdapter
+import com.example.weatherapp.Model.CityApi
 import com.example.weatherapp.Model.CurrentWeatherApiClass
 import com.example.weatherapp.Model.ForecastWeatherApi
+import com.example.weatherapp.R
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -21,6 +23,8 @@ import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 import kotlin.math.roundToInt
+
+public const val API_KEY = "fe02a6b6389e2ba9aff21103d2dbe6fd"
 
 class MainActivity2 : AppCompatActivity() {
 
@@ -78,7 +82,7 @@ class MainActivity2 : AppCompatActivity() {
 //                weatherObject = gson.fromJson(inputString, ForecastWeatherApi::class.java)
 //                } else {
                 val url =
-                    URL("https://api.openweathermap.org/data/2.5/forecast?q=$city&appid=fe02a6b6389e2ba9aff21103d2dbe6fd")
+                    URL("https://api.openweathermap.org/data/2.5/forecast?q=$city&appid=$API_KEY")
                 val connection = url.openConnection() as HttpURLConnection
                 connection.requestMethod = "GET"
                 connection.connect()
@@ -126,6 +130,8 @@ class MainActivity2 : AppCompatActivity() {
         }
     }
 
+
+
     private fun fetchWeatherData(city: String) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
@@ -140,7 +146,7 @@ class MainActivity2 : AppCompatActivity() {
 //                    weatherObject = gson.fromJson(inputString, CurrentWeatherApiClass::class.java)
 //                } else {
                     val url =
-                        URL("https://api.openweathermap.org/data/2.5/weather?q=$city&appid=fe02a6b6389e2ba9aff21103d2dbe6fd")
+                        URL("https://api.openweathermap.org/data/2.5/weather?q=$city&appid=$API_KEY")
                     val connection = url.openConnection() as HttpURLConnection
                     connection.requestMethod = "GET"
                     connection.connect()
