@@ -20,13 +20,19 @@
         android:id="@+id/newCityTextHolder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:autoSizeTextType="uniform"
         android:ems="10"
-        android:inputType="text"
-        android:text="Name"
-        android:autoSizeTextType="uniform"/>
+        android:inputType="text" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/cityList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="496dp" />
+
+    <TextView
+        android:id="@+id/testText"
+        android:layout_width="match_parent"
+        android:layout_height="127dp"
+        android:text="TextView" />
+
 </LinearLayout>

@@ -1,6 +1,7 @@
 package com.example.weatherapp.Activity
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
@@ -38,12 +39,11 @@ class MainActivity2 : AppCompatActivity() {
     private lateinit var pressureTextView: TextView
     private lateinit var windTextView: TextView
     private lateinit var weatherPic: ImageView
+    private lateinit var cityIcon: ImageView
 
     private lateinit var forecastView: RecyclerView
 
     private val forecastAdapter by lazy { ForecastAdapter() }
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,6 +62,14 @@ class MainActivity2 : AppCompatActivity() {
         weatherPic = findViewById(R.id.weatherPic)
 
         forecastView = findViewById(R.id.forecastList)
+        cityIcon = findViewById(R.id.addCityIcon)
+
+        cityIcon.setOnClickListener{
+            val intent = Intent(this, CityToBeChosenActivity::class.java)
+            startActivity(intent)
+        }
+
+
 
         fetchWeatherData("Warsaw")
         cityTextView.setText("Warsaw")

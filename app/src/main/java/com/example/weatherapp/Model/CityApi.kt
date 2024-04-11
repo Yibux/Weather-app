@@ -3,7 +3,7 @@ package com.example.weatherapp.Model
 
 import com.google.gson.annotations.SerializedName
 
-class CityApi : ArrayList<CityApiItem>(){
+class CityApi : ArrayList<CityApi.CityApiItem>(){
     data class CityApiItem(
         @SerializedName("country")
         val country: String?,

@@ -3,6 +3,9 @@ package com.example.weatherapp.Activity
 import android.content.Context
 import android.os.Bundle
 import android.text.TextWatcher
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -30,31 +33,35 @@ class CityToBeChosenActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCityToBeChosenBinding
     private val cityAdapter by lazy { CityAdapter() }
     private lateinit var cityViewer : RecyclerView
+    private lateinit var newCityTextHolder : EditText
+    private lateinit var testText : TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
+        setContentView(R.layout.activity_city_to_be_chosen)
         cityViewer = findViewById(R.id.cityList)
+        newCityTextHolder = findViewById(R.id.newCityTextHolder)
+        testText = findViewById(R.id.testText)
 
-        binding = ActivityCityToBeChosenBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        binding.apply {
-            newCityTextHolder.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                }
+        newCityTextHolder.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
 
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
 
-                override fun afterTextChanged(s: android.text.Editable?) {
+            override fun afterTextChanged(s: android.text.Editable?) {
+                if(s?.length!! >= 3 ) {
+
                     GlobalScope.launch(Dispatchers.IO) {
                         try {
                             val gson = Gson()
                             var weatherObject: CityApi? = null
+//                        testText.setText(s)
 
                             val url =
-                                URL("http://api.openweathermap.org/geo/1.0/direct?q=London&limit=5&appid=$API_KEY")
+                                URL("http://api.openweathermap.org/geo/1.0/direct?q=$s&limit=5&appid=$API_KEY")
                             val connection = url.openConnection() as HttpURLConnection
                             connection.requestMethod = "GET"
                             connection.connect()
@@ -71,18 +78,29 @@ class CityToBeChosenActivity : AppCompatActivity() {
                                 val response = buffer.toString()
 
                                 weatherObject = gson.fromJson(response, CityApi::class.java)
+                                testText.setText(weatherObject.toString())
 
-                                weatherObject?.let {
-                                    cityAdapter.differ.submitList(it as List<CityApi.CityApiItem>?)
-                                    cityViewer.apply {
-                                        layoutManager = LinearLayoutManager(this@CityToBeChosenActivity, LinearLayoutManager.HORIZONTAL, false)
-                                        adapter = cityAdapter
-                                    }
-                                }
+//                            weatherObject?.let {
+//                                val list = it as List<CityApi.CityApiItem>
+////                                    testText.setText(list.toString())
+//                                if(list != null) {
+//                                    runOnUiThread {
+//                                        cityAdapter.differ.submitList(list)
+//                                        cityViewer.apply {
+//                                            layoutManager = LinearLayoutManager(this@CityToBeChosenActivity, LinearLayoutManager.HORIZONTAL, false)
+//                                            adapter = cityAdapter
+//                                        }
+//                                    }
+//                                }
+
+
+//                            }
 
 
                             } else {
-                                throw Exception("Failed to connect")
+                                runOnUiThread {
+                                    Toast.makeText(this@CityToBeChosenActivity, "Failed to connect", Toast.LENGTH_SHORT).show()
+                                }
                             }
 
                         } catch (e: Exception) {
@@ -90,7 +108,7 @@ class CityToBeChosenActivity : AppCompatActivity() {
                         }
                     }
                 }
-            })
-        }
+            }
+        })
     }
 }
