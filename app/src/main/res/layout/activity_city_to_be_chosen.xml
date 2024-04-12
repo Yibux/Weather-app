@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -9,12 +9,21 @@
     tools:context=".Activity.CityToBeChosenActivity"
     android:layout_margin="20dp">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.1"/>
+
     <TextView
+        android:id="@+id/findCityText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Szukaj miasta"
+        android:text="Search for a city"
         android:textAlignment="center"
-        android:autoSizeTextType="uniform"/>
+        android:autoSizeTextType="uniform"
+        app:layout_constraintTop_toBottomOf="@+id/guideline2"/>
 
     <EditText
         android:id="@+id/newCityTextHolder"
@@ -22,17 +31,34 @@
         android:layout_height="wrap_content"
         android:autoSizeTextType="uniform"
         android:ems="10"
-        android:inputType="text" />
+        android:inputType="text"
+        app:layout_constraintTop_toBottomOf="@+id/findCityText"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/cityList"
         android:layout_width="match_parent"
-        android:layout_height="496dp" />
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/newCityTextHolder"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.3"/>
 
     <TextView
-        android:id="@+id/testText"
+        android:id="@+id/favCityText"
         android:layout_width="match_parent"
-        android:layout_height="127dp"
-        android:text="TextView" />
+        android:layout_height="wrap_content"
+        android:text="Select the favourite city"
+        android:textAlignment="center"
+        app:layout_constraintTop_toBottomOf="@+id/guideline3"/>
 
-</LinearLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/favouriteCityList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/favCityText"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

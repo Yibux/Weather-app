@@ -33,7 +33,6 @@ class CityToBeChosenActivity : AppCompatActivity() {
     private val cityAdapter by lazy { CityAdapter() }
     private lateinit var cityViewer : RecyclerView
     private lateinit var newCityTextHolder : EditText
-    private lateinit var testText : TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +40,6 @@ class CityToBeChosenActivity : AppCompatActivity() {
         setContentView(R.layout.activity_city_to_be_chosen)
         cityViewer = findViewById(R.id.cityList)
         newCityTextHolder = findViewById(R.id.newCityTextHolder)
-        testText = findViewById(R.id.testText)
 
         newCityTextHolder.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {

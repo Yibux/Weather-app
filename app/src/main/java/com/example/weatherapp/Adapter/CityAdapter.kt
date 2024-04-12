@@ -32,8 +32,6 @@ class CityAdapter : RecyclerView.Adapter<CityAdapter.ViewHolder>(){
             fos.write(cityName?.toByteArray() ?: byteArrayOf())
             fos.close()
             val intent = Intent(binding.root.context, MainActivity2::class.java)
-
-//            intent.putExtra("name", differ.currentList[position].name)
             intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
             binding.root.context.startActivity(intent)
         }

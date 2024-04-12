@@ -51,6 +51,9 @@ class MainActivity2 : AppCompatActivity() {
 
     private val forecastAdapter by lazy { ForecastAdapter() }
 
+    //TODO: Add a new function to fetch weather forecast data
+    //TODO: Add adding cities as favorites and show them in city to be chosen acitivty
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
