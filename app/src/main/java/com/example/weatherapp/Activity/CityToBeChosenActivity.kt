@@ -17,12 +17,11 @@ import com.example.weatherapp.Adapter.CityAdapter
 import com.example.weatherapp.Model.CityApi
 import com.example.weatherapp.R
 import com.example.weatherapp.databinding.ActivityCityToBeChosenBinding
-import com.example.weatherapp.databinding.CityViewholderBinding
-import com.example.weatherapp.databinding.SingleDayWeatherBinding
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
@@ -53,15 +52,13 @@ class CityToBeChosenActivity : AppCompatActivity() {
 
             override fun afterTextChanged(s: android.text.Editable?) {
                 if(s?.length!! >= 3 ) {
-
                     GlobalScope.launch(Dispatchers.IO) {
                         try {
                             val gson = Gson()
-                            var weatherObject: CityApi? = null
-//                        testText.setText(s)
+                            var weatherObject: List<CityApi.CityApiItem>? = null
 
                             val url =
-                                URL("http://api.openweathermap.org/geo/1.0/direct?q=$s&limit=5&appid=$API_KEY")
+                                URL("https://api.openweathermap.org/geo/1.0/direct?q=$s&limit=5&appid=$API_KEY")
                             val connection = url.openConnection() as HttpURLConnection
                             connection.requestMethod = "GET"
                             connection.connect()
@@ -77,34 +74,39 @@ class CityToBeChosenActivity : AppCompatActivity() {
                                 }
                                 val response = buffer.toString()
 
-                                weatherObject = gson.fromJson(response, CityApi::class.java)
-                                testText.setText(weatherObject.toString())
+                                weatherObject = gson.fromJson(response, Array<CityApi.CityApiItem>::class.java).toList()
 
-//                            weatherObject?.let {
-//                                val list = it as List<CityApi.CityApiItem>
-////                                    testText.setText(list.toString())
-//                                if(list != null) {
-//                                    runOnUiThread {
-//                                        cityAdapter.differ.submitList(list)
-//                                        cityViewer.apply {
-//                                            layoutManager = LinearLayoutManager(this@CityToBeChosenActivity, LinearLayoutManager.HORIZONTAL, false)
-//                                            adapter = cityAdapter
-//                                        }
-//                                    }
-//                                }
-
-
-//                            }
-
-
+                                weatherObject.let {
+                                    val list = it.toMutableList()
+                                    if (list != null) {
+                                        runOnUiThread {
+                                            cityAdapter.differ.submitList(list)
+                                            val context = this@CityToBeChosenActivity
+                                            cityViewer.apply {
+                                                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                                                adapter = cityAdapter
+                                            }
+                                        }
+                                    }
+                                }
                             } else {
-                                runOnUiThread {
-                                    Toast.makeText(this@CityToBeChosenActivity, "Failed to connect", Toast.LENGTH_SHORT).show()
+                                withContext(Dispatchers.Main) {
+                                    Toast.makeText(
+                                        this@CityToBeChosenActivity,
+                                        "Failed to connect",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                 }
                             }
 
                         } catch (e: Exception) {
-                            e.printStackTrace()
+                            withContext(Dispatchers.Main) {
+                                Toast.makeText(
+                                    this@CityToBeChosenActivity,
+                                    e.message,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         }
                     }
                 }

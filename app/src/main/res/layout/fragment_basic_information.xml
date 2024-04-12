@@ -54,7 +54,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:autoSizeTextType="uniform"
-        android:text="city"
+        android:text="-"
         android:textAlignment="center"
         app:layout_constraintBottom_toTopOf="@+id/guideline1"
         app:layout_constraintHorizontal_weight="1"
@@ -100,7 +100,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="0.2"
-                android:text="8"
+                android:text="-"
                 android:textAlignment="center" />
 
             <LinearLayout
@@ -125,7 +125,7 @@
                     android:layout_marginRight="30sp"
                     android:layout_weight="1.3"
                     android:gravity="bottom|left"
-                    android:text="15"
+                    android:text="-"
                     tools:ignore="MissingConstraints,RtlHardcoded" />
 
                 <TextView
@@ -134,7 +134,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1.3"
                     android:gravity="bottom|right"
-                    android:text="15"
+                    android:text="-"
                     tools:ignore="MissingConstraints,RtlHardcoded" />
 
                 <ImageView
@@ -154,7 +154,7 @@
                 android:layout_weight="0.4"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="1000 hPa"
+                android:text="-"
                 android:textAlignment="center"/>
 
         </LinearLayout>

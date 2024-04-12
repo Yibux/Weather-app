@@ -1,5 +1,6 @@
 package com.example.weatherapp.Adapter
 
+import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.Activity.MainActivity2
 import com.example.weatherapp.Model.CityApi
 import com.example.weatherapp.databinding.CityViewholderBinding
-import com.example.weatherapp.databinding.SingleDayWeatherBinding
 
 class CityAdapter : RecyclerView.Adapter<CityAdapter.ViewHolder>(){
 
@@ -17,19 +17,24 @@ class CityAdapter : RecyclerView.Adapter<CityAdapter.ViewHolder>(){
 
     inner class ViewHolder : RecyclerView.ViewHolder(binding.root)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CityAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         binding = CityViewholderBinding.inflate(inflater, parent, false)
         return ViewHolder()
     }
 
-    override fun onBindViewHolder(holder: CityAdapter.ViewHolder, position: Int) {
-        val binding = SingleDayWeatherBinding.bind(holder.itemView)
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val binding = CityViewholderBinding.bind(holder.itemView)
+        binding.cityName.text = differ.currentList[position].name
         binding.root.setOnClickListener {
+            val cityName = differ.currentList[position].name
+            val fos = binding.root.context.openFileOutput("city.txt", Context.MODE_PRIVATE)
+            fos.write(cityName?.toByteArray() ?: byteArrayOf())
+            fos.close()
             val intent = Intent(binding.root.context, MainActivity2::class.java)
-            intent.putExtra("lat", differ.currentList[position].lat)
-            intent.putExtra("lon", differ.currentList[position].lon)
-            intent.putExtra("name", differ.currentList[position].name)
+
+//            intent.putExtra("name", differ.currentList[position].name)
+            intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
             binding.root.context.startActivity(intent)
         }
 

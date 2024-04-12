@@ -2,9 +2,14 @@ package com.example.weatherapp.Activity
 
 import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import android.widget.Toast.makeText
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,6 +23,7 @@ import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.newCoroutineContext
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
@@ -66,14 +72,21 @@ class MainActivity2 : AppCompatActivity() {
 
         cityIcon.setOnClickListener{
             val intent = Intent(this, CityToBeChosenActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
             startActivity(intent)
         }
 
+        val file = File(filesDir, "city.txt")
+        if(file.exists()) {
+            val bufferedReader = file.bufferedReader()
+            val inputString = bufferedReader.use { it.readText() }
+            fetchWeatherData(inputString)
+            cityTextView.setText(inputString)
+            fetchWeatherForecast(inputString)
+        } else {
+            cityTextView.setText("No city selected")
+        }
 
-
-        fetchWeatherData("Warsaw")
-        cityTextView.setText("Warsaw")
-        fetchWeatherForecast("Warsaw")
     }
 
     private fun fetchWeatherForecast(city: String) {
@@ -83,57 +96,78 @@ class MainActivity2 : AppCompatActivity() {
                 val gson = Gson()
                 var weatherObject: ForecastWeatherApi? = null
 
-//                if (file.exists()) {
-//                val bufferedReader = file.bufferedReader()
-//                val inputString = bufferedReader.use { it.readText() }
+                if (isNetworkAvailable(this@MainActivity2)) {
+                    val url =
+                        URL("https://api.openweathermap.org/data/2.5/forecast?q=$city&appid=$API_KEY")
+                    val connection = url.openConnection() as HttpURLConnection
+                    connection.requestMethod = "GET"
+                    connection.connect()
 
-//                weatherObject = gson.fromJson(inputString, ForecastWeatherApi::class.java)
-//                } else {
-                val url =
-                    URL("https://api.openweathermap.org/data/2.5/forecast?q=$city&appid=$API_KEY")
-                val connection = url.openConnection() as HttpURLConnection
-                connection.requestMethod = "GET"
-                connection.connect()
+                    val responseCode = connection.responseCode
+                    if (responseCode == HttpURLConnection.HTTP_OK) {
+                        val stream = connection.inputStream
+                        val reader = BufferedReader(InputStreamReader(stream))
+                        val buffer = StringBuffer()
+                        var line: String?
+                        while (reader.readLine().also { line = it } != null) {
+                            buffer.append(line + "\n")
+                        }
+                        val response = buffer.toString()
 
-                val responseCode = connection.responseCode
-                if (responseCode == HttpURLConnection.HTTP_OK) {
-                    val stream = connection.inputStream
-                    val reader = BufferedReader(InputStreamReader(stream))
-                    val buffer = StringBuffer()
-                    var line: String?
-                    while (reader.readLine().also { line = it } != null) {
-                        buffer.append(line + "\n")
+                        weatherObject = gson.fromJson(response, ForecastWeatherApi::class.java)
+
+                        val weatherJson = gson.toJson(weatherObject)
+                        val fos = openFileOutput("$city.json", Context.MODE_PRIVATE)
+                        fos.write(weatherJson.toByteArray())
+                        fos.close()
+
+
+                    } else {
+                        makeText(
+                            this@MainActivity2,
+                            "Failed to connect",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
-                    val response = buffer.toString()
+                } else {
+                    makeText(
+                        this@MainActivity2,
+                        "No internet connection. Fetching data from cache.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    if(file.exists()) {
+                        val bufferedReader = file.bufferedReader()
+                        val inputString = bufferedReader.use { it.readText() }
 
-                    weatherObject = gson.fromJson(response, ForecastWeatherApi::class.java)
+                        weatherObject = gson.fromJson(inputString, ForecastWeatherApi::class.java)
+                    } else {
+                        makeText(
+                            this@MainActivity2,
+                            "File from cache does not exist. Please connect to the internet to fetch data.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
 
-                    val weatherJson = gson.toJson(weatherObject)
-                    val fos = openFileOutput("$city.json", Context.MODE_PRIVATE)
-                    fos.write(weatherJson.toByteArray())
-                    fos.close()
-
-                    weatherObject?.let {
-                        val list = it.list?.toMutableList()
-                        if (list != null) {
-                            runOnUiThread {
-                                forecastAdapter.differ.submitList(list)
-                                val context = this@MainActivity2
-                                forecastView.apply {
-                                    layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                                    adapter = forecastAdapter
-                                }
+                weatherObject?.let {
+                    val list = it.list?.toMutableList()
+                    if (list != null) {
+                        runOnUiThread {
+                            forecastAdapter.differ.submitList(list)
+                            val context = this@MainActivity2
+                            forecastView.apply {
+                                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                                adapter = forecastAdapter
                             }
                         }
                     }
-
-                } else {
-                    throw Exception("Failed to connect")
                 }
-//                }
-
             } catch (e: Exception) {
-                e.printStackTrace()
+                makeText(
+                    this@MainActivity2,
+                    e.message,
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -143,16 +177,13 @@ class MainActivity2 : AppCompatActivity() {
     private fun fetchWeatherData(city: String) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                val file = File(filesDir, "$city.json")
+                val file = File(filesDir, "forecast_$city.json")
+
                 val gson = Gson()
                 var weatherObject: CurrentWeatherApiClass? = null
 
-//                if (file.exists()) {
-//                    val bufferedReader = file.bufferedReader()
-//                    val inputString = bufferedReader.use { it.readText() }
-//
-//                    weatherObject = gson.fromJson(inputString, CurrentWeatherApiClass::class.java)
-//                } else {
+                if (isNetworkAvailable(this@MainActivity2)) {
+
                     val url =
                         URL("https://api.openweathermap.org/data/2.5/weather?q=$city&appid=$API_KEY")
                     val connection = url.openConnection() as HttpURLConnection
@@ -173,13 +204,22 @@ class MainActivity2 : AppCompatActivity() {
                         weatherObject = gson.fromJson(response, CurrentWeatherApiClass::class.java)
 
                         val weatherJson = gson.toJson(weatherObject)
-                        val fos = openFileOutput("$city.json", Context.MODE_PRIVATE)
+                        val fos = openFileOutput("forecast_$city.json", Context.MODE_PRIVATE)
                         fos.write(weatherJson.toByteArray())
                         fos.close()
                     } else {
                         throw Exception("Failed to connect")
                     }
-//                }
+                } else {
+                    if(file.exists()) {
+                        val bufferedReader = file.bufferedReader()
+                        val inputString = bufferedReader.use { it.readText() }
+
+                        weatherObject = gson.fromJson(inputString, CurrentWeatherApiClass::class.java)
+                    } else {
+                        //do nothing
+                    }
+                }
 
                 val main = weatherObject?.main
                 val tempC = main?.temp?.minus(273)?.roundToInt()
@@ -187,7 +227,7 @@ class MainActivity2 : AppCompatActivity() {
                 val tempMax = main?.tempMax?.minus(273)?.roundToInt()
                 val humidity = main?.humidity
                 val pressure = main?.pressure
-                val wind = weatherObject.wind?.speed
+                val wind = weatherObject?.wind?.speed
 
                 launch(Dispatchers.Main) {
                     temperatureTextView.text = "${tempC}°C"
@@ -197,7 +237,7 @@ class MainActivity2 : AppCompatActivity() {
                     pressureTextView.text = "$pressure hPa"
                     windTextView.text = "$wind km/h"
 
-                    when(weatherObject.weather?.get(0)?.main) {
+                    when(weatherObject?.weather?.get(0)?.main) {
                         "01d", "01n" -> weatherPic.setImageResource(R.drawable.sunny)
                         "02d" -> weatherPic.setImageResource(R.drawable.cloudy_sunny)
                         "02n" -> weatherPic.setImageResource(R.drawable.cloudy_sunny)
@@ -214,4 +254,16 @@ class MainActivity2 : AppCompatActivity() {
             }
         }
     }
+
+    fun isNetworkAvailable(context: Context): Boolean {
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val network = connectivityManager.activeNetwork ?: return false
+            val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+            return when {
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+                else -> false
+            }
+        }
 }
