@@ -21,7 +21,7 @@
             android:id="@+id/addToFavIcon"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.5"
+            android:layout_weight="0.33"
             android:contentDescription="TODO"
             android:src="@android:drawable/btn_star_big_off" />
 
@@ -29,9 +29,16 @@
             android:id="@+id/addCityIcon"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.5"
+            android:layout_weight="0.33"
             android:contentDescription="TODO"
             android:src="@drawable/plus" />
+
+        <ImageView
+            android:id="@+id/fetchWeatherImage"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.33"
+            android:src="@android:drawable/ic_popup_sync" />
     </LinearLayout>
 
     <androidx.constraintlayout.widget.Guideline

@@ -46,6 +46,7 @@ class MainActivity2 : AppCompatActivity() {
     private lateinit var windTextView: TextView
     private lateinit var weatherPic: ImageView
     private lateinit var cityIcon: ImageView
+    private lateinit var fetchWeatherIcon: ImageView
 
     private lateinit var forecastView: RecyclerView
 
@@ -72,6 +73,7 @@ class MainActivity2 : AppCompatActivity() {
 
         forecastView = findViewById(R.id.forecastList)
         cityIcon = findViewById(R.id.addCityIcon)
+        fetchWeatherIcon = findViewById(R.id.fetchWeatherImage)
 
         cityIcon.setOnClickListener{
             val intent = Intent(this, CityToBeChosenActivity::class.java)
@@ -79,6 +81,15 @@ class MainActivity2 : AppCompatActivity() {
             startActivity(intent)
         }
 
+        fetchWeatherIcon.setOnClickListener {
+            getWeather()
+        }
+
+        getWeather()
+
+    }
+
+    private fun getWeather() {
         val file = File(filesDir, "city.txt")
         if(file.exists()) {
             val bufferedReader = file.bufferedReader()
@@ -89,7 +100,6 @@ class MainActivity2 : AppCompatActivity() {
         } else {
             cityTextView.setText("No city selected")
         }
-
     }
 
     private fun fetchWeatherForecast(city: String) {
