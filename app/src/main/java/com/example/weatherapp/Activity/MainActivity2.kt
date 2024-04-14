@@ -47,12 +47,12 @@ class MainActivity2 : AppCompatActivity() {
     private lateinit var weatherPic: ImageView
     private lateinit var cityIcon: ImageView
     private lateinit var fetchWeatherIcon: ImageView
+    private lateinit var favouriteCityIcon: ImageView
 
     private lateinit var forecastView: RecyclerView
 
     private val forecastAdapter by lazy { ForecastAdapter() }
 
-    //TODO: Add a new function to fetch weather forecast data
     //TODO: Add adding cities as favorites and show them in city to be chosen acitivty
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,11 +74,36 @@ class MainActivity2 : AppCompatActivity() {
         forecastView = findViewById(R.id.forecastList)
         cityIcon = findViewById(R.id.addCityIcon)
         fetchWeatherIcon = findViewById(R.id.fetchWeatherImage)
+        favouriteCityIcon = findViewById(R.id.addToFavIcon)
 
         cityIcon.setOnClickListener{
             val intent = Intent(this, CityToBeChosenActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
             startActivity(intent)
+        }
+
+        favouriteCityIcon.setOnClickListener {
+            val file = File(filesDir, "fav_cities.txt")
+            if (!file.exists()) {
+                file.createNewFile()
+            }
+            if(!cityTextView.text.equals("No city selected")) {
+                val fos = openFileOutput("fav_cities.txt", Context.MODE_APPEND)
+                fos.write(cityTextView.text.toString().toByteArray())
+                fos.write("\n".toByteArray())
+                fos.close()
+                makeText(
+                    this@MainActivity2,
+                    "City added to favorites",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                makeText(
+                    this@MainActivity2,
+                    "No city selected",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
 
         fetchWeatherIcon.setOnClickListener {

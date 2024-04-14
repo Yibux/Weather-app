@@ -32,6 +32,7 @@ class CityToBeChosenActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCityToBeChosenBinding
     private val cityAdapter by lazy { CityAdapter() }
     private lateinit var cityViewer : RecyclerView
+    private lateinit var favCitiesViewer : RecyclerView
     private lateinit var newCityTextHolder : EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +41,7 @@ class CityToBeChosenActivity : AppCompatActivity() {
         setContentView(R.layout.activity_city_to_be_chosen)
         cityViewer = findViewById(R.id.cityList)
         newCityTextHolder = findViewById(R.id.newCityTextHolder)
+        favCitiesViewer = findViewById(R.id.favouriteCityList)
 
         newCityTextHolder.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -110,5 +112,27 @@ class CityToBeChosenActivity : AppCompatActivity() {
                 }
             }
         })
+
+        //TODO: fix Load favourite cities
+        val file = File(filesDir, "fav_cities.txt")
+        if (file.exists()) {
+            val reader = BufferedReader(file.reader())
+            val cities = reader.readLines()
+            val list = mutableListOf<CityApi.CityApiItem>()
+            for (city in cities) {
+                list.add(CityApi.CityApiItem(null, 0.0, null, 0.0, city, null))
+            }
+
+            runOnUiThread {
+                cityAdapter.differ.submitList(list)
+                val context = this@CityToBeChosenActivity
+                favCitiesViewer.apply {
+                    layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                    adapter = cityAdapter
+                }
+            }
+        }
+
+
     }
 }
