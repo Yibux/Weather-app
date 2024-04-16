@@ -53,7 +53,7 @@ class MainActivity2 : AppCompatActivity() {
 
     private val forecastAdapter by lazy { ForecastAdapter() }
 
-    //TODO: Add adding cities as favorites and show them in city to be chosen acitivty
+    //TODO: Add adding cities as favorites and show them in city to be chosen acitivty0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -108,6 +108,11 @@ class MainActivity2 : AppCompatActivity() {
 
         fetchWeatherIcon.setOnClickListener {
             getWeather()
+            makeText(
+                this@MainActivity2,
+                "Weather updated",
+                Toast.LENGTH_SHORT
+            ).show()
         }
 
         getWeather()

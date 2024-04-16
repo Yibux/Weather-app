@@ -29,11 +29,12 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 class CityToBeChosenActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityCityToBeChosenBinding
     private val cityAdapter by lazy { CityAdapter() }
+    private val cityAdapterForFavouritesCities by lazy { CityAdapter() }
     private lateinit var cityViewer : RecyclerView
     private lateinit var favCitiesViewer : RecyclerView
     private lateinit var newCityTextHolder : EditText
+    private lateinit var test : TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +43,7 @@ class CityToBeChosenActivity : AppCompatActivity() {
         cityViewer = findViewById(R.id.cityList)
         newCityTextHolder = findViewById(R.id.newCityTextHolder)
         favCitiesViewer = findViewById(R.id.favouriteCityList)
+        test = findViewById(R.id.testText)
 
         newCityTextHolder.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -123,12 +125,13 @@ class CityToBeChosenActivity : AppCompatActivity() {
                 list.add(CityApi.CityApiItem(null, 0.0, null, 0.0, city, null))
             }
 
+            test.setText(list.toString())
             runOnUiThread {
-                cityAdapter.differ.submitList(list)
+                cityAdapterForFavouritesCities.differ.submitList(list)
                 val context = this@CityToBeChosenActivity
                 favCitiesViewer.apply {
-                    layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                    adapter = cityAdapter
+                    layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+                    adapter = cityAdapterForFavouritesCities
                 }
             }
         }
