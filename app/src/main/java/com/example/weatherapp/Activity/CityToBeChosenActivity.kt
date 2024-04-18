@@ -118,8 +118,10 @@ class CityToBeChosenActivity : AppCompatActivity() {
             val reader = BufferedReader(file.reader())
             val cities = reader.readLines()
             val list = mutableListOf<CityApi.CityApiItem>()
-            for (city in cities) {
-                list.add(CityApi.CityApiItem(null, 0.0, null, 0.0, city, null))
+            for (line in cities) {
+                val city = line.split(" ")[0]
+                val country = line.split(" ")[1]
+                list.add(CityApi.CityApiItem(country, 0.0, null, 0.0, city, null))
             }
 
             runOnUiThread {

@@ -78,7 +78,6 @@ class MainActivity2 : AppCompatActivity() {
 
         cityIcon.setOnClickListener{
             val intent = Intent(this, CityToBeChosenActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
             startActivity(intent)
         }
 
@@ -92,7 +91,21 @@ class MainActivity2 : AppCompatActivity() {
                 val isCityFavourite = file.readText().contains(cityName)
 
                 if (isCityFavourite) {
-                    file.writeText(file.readText().replace("$cityName\n", ""))
+                    val bufferedReader = file.bufferedReader()
+                    val country = bufferedReader.use { it.readText() }
+                    val listOfNewFavoriteCities = mutableListOf<String>()
+                    country.lines().forEach { line ->
+                        if (!line.contains(cityName) && line.isNotBlank()) {
+                            listOfNewFavoriteCities.add(line + "\n")
+                        }
+                    }
+                    file.delete()
+                    file.createNewFile()
+                    val fos = openFileOutput("fav_cities.txt", Context.MODE_APPEND)
+                    listOfNewFavoriteCities.forEach {
+                        fos.write(it.toByteArray())
+                    }
+
                     favouriteCityIcon.setImageResource(android.R.drawable.btn_star_big_off)
                     makeText(
                         this@MainActivity2,
@@ -101,9 +114,14 @@ class MainActivity2 : AppCompatActivity() {
                     ).show()
                 } else {
                     val fos = openFileOutput("fav_cities.txt", Context.MODE_APPEND)
+
+                    val file2 = File(filesDir, "country.txt")
+                    val bufferedReader = file2.bufferedReader()
+                    val country = bufferedReader.use { it.readText() }
+
                     fos.write(cityName.toByteArray())
-//                    fos.write(" ".toByteArray())
-//                    fos.write(" ".toByteArray())
+                    fos.write(" ".toByteArray())
+                    fos.write(country.toByteArray())
                     fos.write("\n".toByteArray())
                     fos.close()
                     favouriteCityIcon.setImageResource(android.R.drawable.btn_star_big_on)

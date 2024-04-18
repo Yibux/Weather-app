@@ -10,6 +10,12 @@
     tools:context=".Activity.MainActivity2"
     android:background="#21252B">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.02" />
 
     <include
         android:id="@+id/include"
@@ -17,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline1"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@id/guideline2"
         tools:layout_editor_absoluteX="16dp" />
 
     <androidx.constraintlayout.widget.Guideline
