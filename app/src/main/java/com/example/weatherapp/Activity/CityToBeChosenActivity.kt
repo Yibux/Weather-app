@@ -60,7 +60,7 @@ class CityToBeChosenActivity : AppCompatActivity() {
                             var weatherObject: List<CityApi.CityApiItem>? = null
 
                             val url =
-                                URL("https://api.openweathermap.org/geo/1.0/direct?q=$s&limit=5&appid=$API_KEY")
+                                URL("https://api.openweathermap.org/geo/1.0/direct?q=$s&limit=4&appid=$API_KEY")
                             val connection = url.openConnection() as HttpURLConnection
                             connection.requestMethod = "GET"
                             connection.connect()
@@ -85,7 +85,7 @@ class CityToBeChosenActivity : AppCompatActivity() {
                                             cityAdapter.differ.submitList(list)
                                             val context = this@CityToBeChosenActivity
                                             cityViewer.apply {
-                                                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                                                layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
                                                 adapter = cityAdapter
                                             }
                                         }

@@ -12,6 +12,7 @@ import android.widget.Toast
 import android.widget.Toast.makeText
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.Adapter.ForecastAdapter
@@ -87,16 +88,30 @@ class MainActivity2 : AppCompatActivity() {
             if (!file.exists()) {
                 file.createNewFile()
             }
-            if(!cityTextView.text.equals("No city selected")) {
-                val fos = openFileOutput("fav_cities.txt", Context.MODE_APPEND)
-                fos.write(cityTextView.text.toString().toByteArray())
-                fos.write("\n".toByteArray())
-                fos.close()
-                makeText(
-                    this@MainActivity2,
-                    "City added to favorites",
-                    Toast.LENGTH_SHORT
-                ).show()
+            val cityName = cityTextView.text.toString()
+            if (cityName != "No city selected") {
+                val isCityFavourite = file.readText().contains(cityName)
+
+                if (isCityFavourite) {
+                    file.writeText(file.readText().replace("$cityName\n", ""))
+                    favouriteCityIcon.setImageResource(android.R.drawable.btn_star_big_off)
+                    makeText(
+                        this@MainActivity2,
+                        "City removed from favorites",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    val fos = openFileOutput("fav_cities.txt", Context.MODE_APPEND)
+                    fos.write(cityName.toByteArray())
+                    fos.write("\n".toByteArray())
+                    fos.close()
+                    favouriteCityIcon.setImageResource(android.R.drawable.btn_star_big_on)
+                    makeText(
+                        this@MainActivity2,
+                        "City added to favorites",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             } else {
                 makeText(
                     this@MainActivity2,
@@ -105,6 +120,9 @@ class MainActivity2 : AppCompatActivity() {
                 ).show()
             }
         }
+
+        handleFavouriteCityIcon()
+
 
         fetchWeatherIcon.setOnClickListener {
             getWeather()
@@ -117,6 +135,23 @@ class MainActivity2 : AppCompatActivity() {
 
         getWeather()
 
+    }
+
+    private fun handleFavouriteCityIcon() {
+        val file = File(filesDir, "fav_cities.txt")
+        if (!file.exists()) {
+            file.createNewFile()
+        }
+        val cityName = cityTextView.text.toString()
+        if (cityName != "No city selected") {
+            val isCityFavourite = file.readText().contains(cityName)
+
+            if (isCityFavourite) {
+                favouriteCityIcon.setImageResource(android.R.drawable.btn_star_big_on)
+            } else {
+                favouriteCityIcon.setImageResource(android.R.drawable.btn_star_big_off)
+            }
+        }
     }
 
     private fun getWeather() {
