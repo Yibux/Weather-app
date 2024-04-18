@@ -34,7 +34,6 @@ class CityToBeChosenActivity : AppCompatActivity() {
     private lateinit var cityViewer : RecyclerView
     private lateinit var favCitiesViewer : RecyclerView
     private lateinit var newCityTextHolder : EditText
-    private lateinit var test : TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +42,6 @@ class CityToBeChosenActivity : AppCompatActivity() {
         cityViewer = findViewById(R.id.cityList)
         newCityTextHolder = findViewById(R.id.newCityTextHolder)
         favCitiesViewer = findViewById(R.id.favouriteCityList)
-        test = findViewById(R.id.testText)
 
         newCityTextHolder.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -115,7 +113,6 @@ class CityToBeChosenActivity : AppCompatActivity() {
             }
         })
 
-        //TODO: fix Load favourite cities
         val file = File(filesDir, "fav_cities.txt")
         if (file.exists()) {
             val reader = BufferedReader(file.reader())
@@ -125,7 +122,6 @@ class CityToBeChosenActivity : AppCompatActivity() {
                 list.add(CityApi.CityApiItem(null, 0.0, null, 0.0, city, null))
             }
 
-            test.setText(list.toString())
             runOnUiThread {
                 cityAdapterForFavouritesCities.differ.submitList(list)
                 val context = this@CityToBeChosenActivity

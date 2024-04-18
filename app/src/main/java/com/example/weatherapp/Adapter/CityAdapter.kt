@@ -26,11 +26,18 @@ class CityAdapter : RecyclerView.Adapter<CityAdapter.ViewHolder>(){
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val binding = CityViewholderBinding.bind(holder.itemView)
         binding.cityName.text = differ.currentList[position].name
+        binding.countryName.text = differ.currentList[position].country
         binding.root.setOnClickListener {
             val cityName = differ.currentList[position].name
-            val fos = binding.root.context.openFileOutput("city.txt", Context.MODE_PRIVATE)
-            fos.write(cityName?.toByteArray() ?: byteArrayOf())
-            fos.close()
+            val countryName = differ.currentList[position].country
+
+            val fosCity = binding.root.context.openFileOutput("city.txt", Context.MODE_PRIVATE)
+            fosCity.write(cityName?.toByteArray() ?: byteArrayOf())
+            fosCity.close()
+
+            val fosCountry = binding.root.context.openFileOutput("country.txt", Context.MODE_PRIVATE)
+            fosCountry.write(countryName?.toByteArray() ?: byteArrayOf())
+            fosCountry.close()
             val intent = Intent(binding.root.context, MainActivity2::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
             binding.root.context.startActivity(intent)

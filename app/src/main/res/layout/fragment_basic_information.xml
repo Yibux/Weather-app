@@ -45,14 +45,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.1" />
+        app:layout_constraintGuide_percent="0.16" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.4" />
+        app:layout_constraintGuide_percent="0.42" />
 
     <TextView
         android:id="@+id/city"
@@ -105,7 +105,7 @@
                 style="@style/BasicInfoText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="0.2"
+                android:layout_weight="0.3"
                 android:text="-"
                 android:textAlignment="center" />
 
@@ -121,25 +121,25 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="10sp"
-                    android:layout_weight="1"
                     android:src="@drawable/arrow_down" />
 
                 <TextView
                     android:id="@+id/temperatureMin"
                     style="@style/BasicInfoText"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginRight="30sp"
-                    android:layout_weight="1.3"
                     android:gravity="bottom|left"
+                    android:layout_marginRight="20sp"
                     android:text="-"
                     tools:ignore="MissingConstraints,RtlHardcoded" />
 
                 <TextView
                     android:id="@+id/temperatureMax"
                     style="@style/BasicInfoText"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_weight="1.3"
                     android:gravity="bottom|right"
+                    android:layout_marginLeft="20sp"
                     android:text="-"
                     tools:ignore="MissingConstraints,RtlHardcoded" />
 
@@ -149,7 +149,6 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="bottom"
                     android:layout_marginRight="10sp"
-                    android:layout_weight="1"
                     android:src="@drawable/arrow_up" />
 
             </LinearLayout>
@@ -172,7 +171,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.75" />
+        app:layout_constraintGuide_percent="0.74" />
 
     <LinearLayout
         android:layout_width="match_parent"

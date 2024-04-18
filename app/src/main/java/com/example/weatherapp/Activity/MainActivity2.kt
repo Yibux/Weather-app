@@ -25,6 +25,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.newCoroutineContext
+import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
@@ -53,8 +54,6 @@ class MainActivity2 : AppCompatActivity() {
     private lateinit var forecastView: RecyclerView
 
     private val forecastAdapter by lazy { ForecastAdapter() }
-
-    //TODO: Add adding cities as favorites and show them in city to be chosen acitivty0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -103,6 +102,8 @@ class MainActivity2 : AppCompatActivity() {
                 } else {
                     val fos = openFileOutput("fav_cities.txt", Context.MODE_APPEND)
                     fos.write(cityName.toByteArray())
+//                    fos.write(" ".toByteArray())
+//                    fos.write(" ".toByteArray())
                     fos.write("\n".toByteArray())
                     fos.close()
                     favouriteCityIcon.setImageResource(android.R.drawable.btn_star_big_on)
@@ -121,7 +122,6 @@ class MainActivity2 : AppCompatActivity() {
             }
         }
 
-        handleFavouriteCityIcon()
 
 
         fetchWeatherIcon.setOnClickListener {
@@ -134,7 +134,6 @@ class MainActivity2 : AppCompatActivity() {
         }
 
         getWeather()
-
     }
 
     private fun handleFavouriteCityIcon() {
@@ -162,6 +161,7 @@ class MainActivity2 : AppCompatActivity() {
             fetchWeatherData(inputString)
             cityTextView.setText(inputString)
             fetchWeatherForecast(inputString)
+            handleFavouriteCityIcon()
         } else {
             cityTextView.setText("No city selected")
         }
@@ -201,37 +201,45 @@ class MainActivity2 : AppCompatActivity() {
 
 
                     } else {
+                        withContext(Dispatchers.Main) {
+                            makeText(
+                                this@MainActivity2,
+                                "Failed to connect",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
                         makeText(
                             this@MainActivity2,
-                            "Failed to connect",
+                            "No internet connection. Fetching data from cache.",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
-                } else {
-                    makeText(
-                        this@MainActivity2,
-                        "No internet connection. Fetching data from cache.",
-                        Toast.LENGTH_SHORT
-                    ).show()
                     if(file.exists()) {
                         val bufferedReader = file.bufferedReader()
                         val inputString = bufferedReader.use { it.readText() }
 
                         weatherObject = gson.fromJson(inputString, ForecastWeatherApi::class.java)
                     } else {
-                        makeText(
-                            this@MainActivity2,
-                            "File from cache does not exist. Please connect to the internet to fetch data.",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        withContext(Dispatchers.Main) {
+                            makeText(
+                                this@MainActivity2,
+                                "File from cache does not exist. Please connect to the internet to fetch data.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
                 }
 
                 weatherObject?.let {
                     val list = it.list?.toMutableList()
                     if (list != null) {
+                        val filteredList = list.filterIndexed { index, _ -> (index + 1) % 3 == 0 }
+
                         runOnUiThread {
-                            forecastAdapter.differ.submitList(list)
+                            forecastAdapter.differ.submitList(filteredList)
                             val context = this@MainActivity2
                             forecastView.apply {
                                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
@@ -241,11 +249,13 @@ class MainActivity2 : AppCompatActivity() {
                     }
                 }
             } catch (e: Exception) {
-                makeText(
-                    this@MainActivity2,
-                    e.message,
-                    Toast.LENGTH_SHORT
-                ).show()
+                withContext(Dispatchers.Main) {
+                    makeText(
+                        this@MainActivity2,
+                        e.message,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
     }
@@ -328,7 +338,13 @@ class MainActivity2 : AppCompatActivity() {
                     }
                 }
             } catch (e: Exception) {
-                e.printStackTrace()
+                withContext(Dispatchers.Main) {
+                    makeText(
+                        this@MainActivity2,
+                        e.message,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
     }
