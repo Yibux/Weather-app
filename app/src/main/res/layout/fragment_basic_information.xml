@@ -8,51 +8,19 @@
     android:orientation="horizontal"
     android:padding="16dp">
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/guideline4"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/addToFavIcon"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.33"
-            android:contentDescription="TODO"
-            android:src="@android:drawable/btn_star_big_off" />
-
-        <ImageView
-            android:id="@+id/addCityIcon"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.33"
-            android:contentDescription="TODO"
-            android:src="@drawable/plus" />
-
-        <ImageView
-            android:id="@+id/fetchWeatherImage"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.33"
-            android:src="@android:drawable/ic_popup_sync" />
-    </LinearLayout>
-
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.16" />
+        app:layout_constraintGuide_percent="0.0" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.42" />
+        app:layout_constraintGuide_percent="0.35" />
 
     <TextView
         android:id="@+id/city"
@@ -168,70 +136,6 @@
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.74" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="20sp"
-        android:orientation="horizontal"
-        android:textAlignment="center"
-        app:layout_constraintBottom_toTopOf="@id/guideline8"
-        app:layout_constraintTop_toTopOf="@id/guideline7">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.35"
-                android:src="@drawable/humidity" />
-
-            <TextView
-                android:id="@+id/humidity"
-                style="@style/BasicInfoText"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.65"
-                android:text="-%"
-                android:textAlignment="center" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/imageView3"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.35"
-                android:src="@drawable/wind" />
-
-            <TextView
-                android:id="@+id/wind"
-                style="@style/BasicInfoText"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.65"
-                android:text="-Km/h"
-                android:textAlignment="center" />
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
