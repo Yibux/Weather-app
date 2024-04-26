@@ -10,6 +10,10 @@
     tools:context=".Activity.MainActivity2"
     android:background="#21252B">
 
+    <androidx.viewpager2.widget.ViewPager2
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
         android:layout_width="wrap_content"
@@ -33,14 +37,6 @@
         app:layout_constraintTop_toTopOf="@id/guideline2"
         tools:layout_editor_absoluteX="16dp" />
 
-    <include
-        android:id="@+id/include3"
-        layout="@layout/fragment_humidity_and_wind"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline5"
-        app:layout_constraintTop_toTopOf="@id/guideline4"
-        tools:layout_editor_absoluteX="16dp" />
 
     <include
         android:id="@+id/include"
@@ -48,8 +44,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline4"
-        app:layout_constraintTop_toTopOf="@id/guideline3"
-        tools:layout_editor_absoluteX="16dp" />
+        app:layout_constraintTop_toTopOf="@id/guideline3" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline1"
@@ -62,7 +57,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.55" />
+        app:layout_constraintGuide_percent="0.7" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline5"
@@ -78,5 +73,7 @@
         android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/guideline5" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

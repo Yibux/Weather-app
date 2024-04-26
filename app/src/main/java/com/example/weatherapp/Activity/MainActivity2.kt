@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.os.Build
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
@@ -12,11 +11,9 @@ import android.widget.Toast
 import android.widget.Toast.makeText
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.Adapter.ForecastAdapter
-import com.example.weatherapp.Model.CityApi
 import com.example.weatherapp.Model.CurrentWeatherApiClass
 import com.example.weatherapp.Model.ForecastWeatherApi
 import com.example.weatherapp.R
@@ -24,7 +21,6 @@ import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.newCoroutineContext
 import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.File
@@ -76,6 +72,28 @@ class MainActivity2 : AppCompatActivity() {
         fetchWeatherIcon = findViewById(R.id.fetchWeatherImage)
         favouriteCityIcon = findViewById(R.id.addToFavIcon)
 
+        getWeather()
+        setOnClickIcons()
+    }
+
+    private fun handleFavouriteCityIcon() {
+        val file = File(filesDir, "fav_cities.txt")
+        if (!file.exists()) {
+            file.createNewFile()
+        }
+        val cityName = cityTextView.text.toString()
+        if (cityName != "No city selected") {
+            val isCityFavourite = file.readText().contains(cityName)
+
+            if (isCityFavourite) {
+                favouriteCityIcon.setImageResource(android.R.drawable.btn_star_big_on)
+            } else {
+                favouriteCityIcon.setImageResource(android.R.drawable.btn_star_big_off)
+            }
+        }
+    }
+
+    private fun setOnClickIcons() {
         cityIcon.setOnClickListener{
             val intent = Intent(this, CityToBeChosenActivity::class.java)
             startActivity(intent)
@@ -141,7 +159,6 @@ class MainActivity2 : AppCompatActivity() {
         }
 
 
-
         fetchWeatherIcon.setOnClickListener {
             getWeather()
             makeText(
@@ -149,25 +166,6 @@ class MainActivity2 : AppCompatActivity() {
                 "Weather updated",
                 Toast.LENGTH_SHORT
             ).show()
-        }
-
-        getWeather()
-    }
-
-    private fun handleFavouriteCityIcon() {
-        val file = File(filesDir, "fav_cities.txt")
-        if (!file.exists()) {
-            file.createNewFile()
-        }
-        val cityName = cityTextView.text.toString()
-        if (cityName != "No city selected") {
-            val isCityFavourite = file.readText().contains(cityName)
-
-            if (isCityFavourite) {
-                favouriteCityIcon.setImageResource(android.R.drawable.btn_star_big_on)
-            } else {
-                favouriteCityIcon.setImageResource(android.R.drawable.btn_star_big_off)
-            }
         }
     }
 
