@@ -47,10 +47,10 @@ class FragmentBasicInformation : Fragment() {
 
             val file = File(context?.filesDir, "forecast_${inputString}.json")
             if(file.exists()) {
-                val bufferedReader = file.bufferedReader()
-                val inputString = bufferedReader.use { it.readText() }
+                val bufferedReader2 = file.bufferedReader()
+                val inputString2 = bufferedReader2.use { it.readText() }
                 val gson = Gson()
-                val weatherObject = gson.fromJson(inputString, CurrentWeatherApiClass::class.java)
+                val weatherObject = gson.fromJson(inputString2, CurrentWeatherApiClass::class.java)
                 updateWeather(weatherObject)
             }
         } else {
