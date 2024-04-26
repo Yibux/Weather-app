@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.Model.ForecastWeatherApi
 import com.example.weatherapp.R
+import com.example.weatherapp.UserPreferences
 import com.example.weatherapp.databinding.SingleDayWeatherBinding
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -15,6 +16,7 @@ import kotlin.math.roundToInt
 class ForecastAdapter : RecyclerView.Adapter<ForecastAdapter.ViewHolder>(){
 
     private lateinit var binding: SingleDayWeatherBinding
+    private lateinit var userPreferences: UserPreferences
 
     inner class ViewHolder : RecyclerView.ViewHolder(binding.root)
 
@@ -29,6 +31,8 @@ class ForecastAdapter : RecyclerView.Adapter<ForecastAdapter.ViewHolder>(){
         val date = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(differ.currentList[position].dtTxt.toString())
         val calendar = Calendar.getInstance()
         calendar.time = date
+
+        userPreferences = UserPreferences(holder.itemView.context)
 
         val dayOfWeek = when(calendar.get(Calendar.DAY_OF_WEEK)){
             1 -> "Sunday"
@@ -45,7 +49,15 @@ class ForecastAdapter : RecyclerView.Adapter<ForecastAdapter.ViewHolder>(){
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
         val time = if(hour > 12) "${hour - 12} PM" else "$hour AM"
         binding.hourForecast.text = time
-        binding.temperatureForecast.text = differ.currentList[position].main?.temp?.roundToInt()?.minus(273).toString() + "°C"
+
+        if(userPreferences.getTemperatureUnit() == "metric")
+            binding.temperatureForecast.text =
+                differ.currentList[position].main?.temp?.roundToInt().toString() + "°C"
+        else {
+            val temp = differ.currentList[position].main?.temp
+            val fahrenheit = (temp?.times(9)?.div(5))?.plus(32)
+            binding.temperatureForecast.text = fahrenheit?.roundToInt().toString() + "°F"
+        }
 
         when(differ.currentList[position].weather?.get(0)?.icon) {
             "01d", "01n" -> binding.imageView.setImageResource(R.drawable.sunny)

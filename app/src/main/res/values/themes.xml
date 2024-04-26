@@ -2,4 +2,6 @@
 <resources>
 
     <style name="Theme.WeatherApp" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.AppCompat.DayNight.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar" />
 </resources>
