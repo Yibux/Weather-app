@@ -51,9 +51,13 @@ class FragmentBasicInformation : Fragment() {
             val inputString = bufferedReader.use { it.readText() }
             cityTextView.text = inputString
 
-            val file = File(context?.filesDir, "forecast_${inputString}.json")
-            if(file.exists()) {
-                val bufferedReader2 = file.bufferedReader()
+            if(inputString == "" || inputString.lowercase() == "no city selected") {
+                return view
+            }
+
+            val file2 = File(context?.filesDir, "forecast_${inputString}.json")
+            if(file2.exists()) {
+                val bufferedReader2 = file2.bufferedReader()
                 val inputString2 = bufferedReader2.use { it.readText() }
                 val gson = Gson()
                 val weatherObject = gson.fromJson(inputString2, CurrentWeatherApiClass::class.java)

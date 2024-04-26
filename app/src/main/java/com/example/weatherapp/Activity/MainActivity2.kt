@@ -53,15 +53,26 @@ class MainActivity2 : AppCompatActivity() {
             userPreferences = UserPreferences(this)
             unitsFromFile = userPreferences.getTemperatureUnit()
 
-            setFetchTime()
             getWeather()
+            setFetchTime()
             val viewPager = findViewById<ViewPager2>(R.id.viewPager)
             viewPager.adapter = ViewPagerAdapter(this)
         }
     }
 
 
-    fun setFetchTime() {
+    private fun setFetchTime() {
+        val file = File(filesDir, "city.txt")
+        if(file.exists()) {
+            val bufferedReader = file.bufferedReader()
+            val inputString = bufferedReader.use { it.readText() }
+            if (inputString == "" || inputString.lowercase() == "no city selected") {
+                return
+            }
+        } else {
+            return
+        }
+
         val period = when (userPreferences.getFetchWeatherFrequency()) {
             "10 seconds" -> 10
             "30 seconds" -> 30
@@ -75,6 +86,13 @@ class MainActivity2 : AppCompatActivity() {
         timer.schedule(object : TimerTask(){
             override fun run() {
                 getWeather()
+                val fragmentManager = supportFragmentManager
+                for (fragment in fragmentManager.fragments) {
+                    if (fragment != null) {
+                        fragmentManager.beginTransaction().detach(fragment).commitNowAllowingStateLoss()
+                        fragmentManager.beginTransaction().attach(fragment).commitAllowingStateLoss()
+                    }
+                }
             }
         }, 0, period.toLong() * 1000)
     }

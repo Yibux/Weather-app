@@ -29,6 +29,9 @@ class ForecastFragment : Fragment() {
         if (cityFile.exists()) {
             val bufferedReader = cityFile.bufferedReader()
             val inputString = bufferedReader.use { it.readText() }
+            if(inputString == "" || inputString.lowercase() == "no city selected") {
+                return view
+            }
             val file = File(context?.filesDir, "$inputString.json")
             if (file.exists()) {
                 val bufferedReader2 = file.bufferedReader()

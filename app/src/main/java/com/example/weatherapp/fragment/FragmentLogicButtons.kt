@@ -32,7 +32,7 @@ class FragmentLogicButtons : Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_logic_buttons, container, false)
-        val radioOptions = arrayOf("10 seconds", "30 seconds", "1 minute", "5 minutes", "10 minutes")
+        val radioOptions = arrayOf("1 minute", "5 minutes", "10 minutes")
 
         cityIcon = view.findViewById(R.id.addCityIcon)
         favouriteCityIcon = view.findViewById(R.id.addToFavIcon)
