@@ -1,6 +1,7 @@
 package com.example.weatherapp.Activity
 
 import android.content.Context
+import android.content.res.Configuration
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Bundle
@@ -39,17 +40,26 @@ class MainActivity2 : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
-        userPreferences = UserPreferences(this)
-        unitsFromFile = userPreferences.getTemperatureUnit()
 
-        setFetchTime()
-        getWeather()
+        if(isTablet(this)) {
+            setContentView(R.layout.activity_main_for_tablet)
+            userPreferences = UserPreferences(this)
+            unitsFromFile = userPreferences.getTemperatureUnit()
 
-        val viewPager = findViewById<ViewPager2>(R.id.viewPager)
-        viewPager.adapter = ViewPagerAdapter(this)
+            setFetchTime()
+            getWeather()
+        } else {
+            setContentView(R.layout.activity_main)
+            userPreferences = UserPreferences(this)
+            unitsFromFile = userPreferences.getTemperatureUnit()
 
+            setFetchTime()
+            getWeather()
+            val viewPager = findViewById<ViewPager2>(R.id.viewPager)
+            viewPager.adapter = ViewPagerAdapter(this)
+        }
     }
+
 
     fun setFetchTime() {
         val period = when (userPreferences.getFetchWeatherFrequency()) {
@@ -76,7 +86,7 @@ class MainActivity2 : AppCompatActivity() {
             val inputString = bufferedReader.use { it.readText() }
             fetchWeatherData(inputString)
             fetchWeatherForecast(inputString)
-            runOnUiThread{
+            runOnUiThread {
                 makeText(
                     this,
                     "Fetching weather data for $inputString",
@@ -84,11 +94,15 @@ class MainActivity2 : AppCompatActivity() {
                 ).show()
             }
         } else {
-            makeText(
-                this,
-                "No city selected",
-                Toast.LENGTH_SHORT
-            ).show()
+            GlobalScope.launch {
+                withContext(Dispatchers.Main) {
+                    makeText(
+                        this@MainActivity2,
+                        "No city selected",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
         }
     }
 
@@ -228,5 +242,11 @@ class MainActivity2 : AppCompatActivity() {
                 activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
                 else -> false
         }
+    }
+
+    fun isTablet(context: Context): Boolean {
+        val xlarge = (context.resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_XLARGE
+        val large = (context.resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE
+        return xlarge || large
     }
 }
